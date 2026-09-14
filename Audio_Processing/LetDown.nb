@@ -1,0 +1,365 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     14375,        357]
+NotebookOptionsPosition[     12884,        328]
+NotebookOutlinePosition[     13228,        343]
+CellTagsIndexPosition[     13185,        340]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Abrir", " ", "el", " ", "archivo"}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"rutaArchivo", "=", 
+     RowBox[{"SystemDialogInput", "[", "\"\<FileOpen\>\"", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Comprobamos", " ", "si", " ", "se", " ", "seleccion\[OAcute]", " ", "un",
+      " ", "archivo", " ", "v\[AAcute]lido"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"rutaArchivo", "===", "$Canceled"}], "||", 
+      RowBox[{"!", 
+       RowBox[{"StringQ", "[", "rutaArchivo", "]"}]}]}], ",", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<No se ha seleccionado ning\[UAcute]n archivo. El c\[OAcute]digo se \
+detiene.\>\"", "]"}], ",", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"--", 
+         RowBox[{"-", "SI"}]}], " ", "EL", " ", "ARCHIVO", " ", "EXISTE"}], 
+       ",", 
+       RowBox[{
+        RowBox[{"EJECUTAMOS", " ", "TODO", " ", "EL", " ", 
+         RowBox[{"AN\[CapitalAAcute]LISIS", "--"}]}], "-"}]}], "*)"}], 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Cargando archivo: \>\"", ",", 
+         RowBox[{"FileBaseName", "[", "rutaArchivo", "]"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Importamos", " ", "como", " ", "objeto", " ", "Audio"}], 
+        "*)"}], 
+       RowBox[{"LetDown", "=", 
+        RowBox[{"Import", "[", 
+         RowBox[{"rutaArchivo", ",", "\"\<Audio\>\""}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"LetDown", "===", "$Failed"}], ",", 
+         RowBox[{
+         "Print", "[", 
+          "\"\<Error cr\[IAcute]tico: No se pudo importar el audio. Revisa el \
+archivo.\>\"", "]"}], ",", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"Si", " ", "importa", " ", "bien"}], ",", 
+           RowBox[{"seguimos", ":"}]}], "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"(", 
+          RowBox[{"(*", "Discretizaci\[OAcute]n", "*)"}], 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Muestreo", "=", 
+            RowBox[{"QuantityMagnitude", "[", 
+             RowBox[{"AudioSampleRate", "[", "LetDown", "]"}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Datos", "=", 
+            RowBox[{"AudioData", "[", "LetDown", "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"(*", 
+            RowBox[{"Conversi\[OAcute]n", " ", "a", " ", "Mono"}], "*)"}], 
+           RowBox[{"DatoAura", "=", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"MatrixQ", "[", "Datos", "]"}], ",", 
+              RowBox[{"Mean", "[", "Datos", "]"}], ",", "Datos"}], "]"}]}], 
+           ";", "\[IndentingNewLine]", 
+           RowBox[{
+           "Print", "[", "\"\<Audio cargado correctamente.\>\"", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Print", "[", 
+            RowBox[{"\"\<Duraci\[OAcute]n: \>\"", ",", 
+             RowBox[{"N", "[", 
+              RowBox[{
+               RowBox[{"Length", "[", "DatoAura", "]"}], "/", "Muestreo"}], 
+              "]"}], ",", "\"\< s | Frecuencia: \>\"", ",", "Muestreo", ",", 
+             "\"\< Hz\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"(*", "FOURIER", "*)"}], 
+           RowBox[{
+           "Print", "[", "\"\<Calculando Transformada de Fourier...\>\"", 
+            "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"transformadaCompleta", "=", 
+            RowBox[{"Fourier", "[", 
+             RowBox[{"DatoAura", ",", 
+              RowBox[{"FourierParameters", "\[Rule]", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"-", "1"}], ",", "1"}], "}"}]}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"mitadPuntos", "=", 
+            RowBox[{"Floor", "[", 
+             RowBox[{
+              RowBox[{"Length", "[", "transformadaCompleta", "]"}], "/", 
+              "2"}], "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"espectroCompleto", "=", 
+            RowBox[{"Abs", "[", 
+             RowBox[{"transformadaCompleta", "[", 
+              RowBox[{"[", 
+               RowBox[{"1", ";;", "mitadPuntos"}], "]"}], "]"}], "]"}]}], ";",
+            "\[IndentingNewLine]", 
+           RowBox[{
+           "Print", "[", "\"\<Generando gr\[AAcute]ficos...\>\"", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"graficoTiempo", "=", 
+            RowBox[{"ListLinePlot", "[", 
+             RowBox[{
+              RowBox[{"DatoAura", "[", 
+               RowBox[{"[", 
+                RowBox[{"1", ";;", 
+                 RowBox[{"Min", "[", 
+                  RowBox[{"50000", ",", 
+                   RowBox[{"Length", "[", "DatoAura", "]"}]}], "]"}]}], "]"}],
+                "]"}], ",", 
+              RowBox[{
+              "PlotLabel", "\[Rule]", 
+               "\"\<1. Se\[NTilde]al en el Tiempo (Zoom inicial)\>\""}], ",", 
+              RowBox[{"AxesLabel", "\[Rule]", 
+               RowBox[{"{", 
+                RowBox[{"\"\<Muestras\>\"", ",", "\"\<Amplitud\>\""}], 
+                "}"}]}], ",", 
+              RowBox[{"ImageSize", "\[Rule]", "Medium"}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"graficoFrecuencia", "=", 
+            RowBox[{"ListLinePlot", "[", 
+             RowBox[{"espectroCompleto", ",", 
+              RowBox[{"DataRange", "\[Rule]", 
+               RowBox[{"{", 
+                RowBox[{"0", ",", 
+                 RowBox[{"Muestreo", "/", "2"}]}], "}"}]}], ",", 
+              RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+              RowBox[{
+              "PlotLabel", "\[Rule]", 
+               "\"\<2. Espectro de Frecuencias (Fourier)\>\""}], ",", 
+              RowBox[{"AxesLabel", "\[Rule]", 
+               RowBox[{"{", 
+                RowBox[{"\"\<Frecuencia (Hz)\>\"", ",", "\"\<Magnitud\>\""}], 
+                "}"}]}], ",", 
+              RowBox[{"ImageSize", "\[Rule]", "Medium"}], ",", 
+              RowBox[{"PerformanceGoal", "\[Rule]", "\"\<Speed\>\""}]}], 
+             "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"(*", 
+            RowBox[{"ImageSize", "\[Rule]", 
+             RowBox[{
+             "Medium", " ", "para", " ", "que", " ", "tenga", " ", "el", " ", 
+              "mismo", " ", "tama\[NTilde]o", " ", "que", " ", "los", " ", 
+              "otros"}]}], "*)"}], "\[IndentingNewLine]", 
+           RowBox[{"graficoEspectrograma", "=", 
+            RowBox[{"Spectrogram", "[", 
+             RowBox[{"LetDown", ",", 
+              RowBox[{"PlotLabel", "\[Rule]", "\"\<3. Espectrograma\>\""}], 
+              ",", 
+              RowBox[{"ImageSize", "\[Rule]", "Medium"}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Print", "[", "\"\<Visualizando resultados:\>\"", "]"}], 
+           ";", "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{
+            "graficoTiempo", ",", "graficoFrecuencia", ",", 
+             "graficoEspectrograma"}], "}"}]}], ")"}]}], "]"}]}], ")"}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.9727998413789215`*^9, 3.9728000352426043`*^9}, {
+   3.9728003086584673`*^9, 3.9728006354941645`*^9}, {3.972800669456898*^9, 
+   3.9728007493881483`*^9}, {3.9728008066854696`*^9, 
+   3.9728008128029995`*^9}, {3.9728012882354574`*^9, 3.972801378543973*^9}, {
+   3.972801440740981*^9, 3.972801451106929*^9}, {3.972801526116102*^9, 
+   3.9728016001343513`*^9}, {3.972801646340974*^9, 3.9728016516228523`*^9}, {
+   3.973067163711502*^9, 3.973067224993123*^9}, {3.9730672799577866`*^9, 
+   3.9730672864636087`*^9}, 3.9730673263192654`*^9, {3.9730674866680193`*^9, 
+   3.9730675334279613`*^9}, {3.973067622752052*^9, 3.973067630566531*^9}, 
+   3.9730676645696087`*^9, {3.973067755104209*^9, 3.9730677604711514`*^9}, {
+   3.973067910906872*^9, 3.9730680869180374`*^9}, {3.9730691627111063`*^9, 
+   3.973069180664939*^9}, {3.973069252898258*^9, 3.9730692568197393`*^9}, 
+   3.97306944346288*^9, 3.9730695319721584`*^9, {3.9730695999907646`*^9, 
+   3.973069711237666*^9}, {3.9730708235125475`*^9, 3.9730708303783026`*^9}, 
+   3.9730711802597685`*^9, {3.9730713638635635`*^9, 3.9730715064679394`*^9}, {
+   3.973071802447378*^9, 
+   3.9730718043487034`*^9}},ExpressionUUID->"05174a56-dfe1-42ff-b54f-\
+e62400a4305e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"Visualizando resultados:\"\>"], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.9730696200795174`*^9, {3.973070776072586*^9, 3.973070819854582*^9}, 
+   3.973071324620717*^9},
+ CellLabel->
+  "Durante la evaluaci\[OAcute]n de \
+In[1]:=",ExpressionUUID->"d3e0e39b-9024-4ef5-99fe-f1964df52f6a"],
+
+Cell[BoxData["\<\"Generando gr\[AAcute]ficos (esto puede tardar un poco)...\"\
+\>"], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.9730696200795174`*^9, {3.973070776072586*^9, 3.973070819854582*^9}, 
+   3.9730712127131968`*^9},
+ CellLabel->
+  "Durante la evaluaci\[OAcute]n de \
+In[1]:=",ExpressionUUID->"087e3fe7-3629-438c-aabd-46ca0dbe14c4"],
+
+Cell[BoxData["\<\"Calculando Transformada de Fourier...\"\>"], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.9730696200795174`*^9, {3.973070776072586*^9, 3.973070819854582*^9}, 
+   3.97307121215508*^9},
+ CellLabel->
+  "Durante la evaluaci\[OAcute]n de \
+In[1]:=",ExpressionUUID->"dc68f4c3-50aa-4d69-a12f-31047880d2cd"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Duraci\[OAcute]n: \"\>", "\[InvisibleSpace]", 
+   "299.33714285714285`", "\[InvisibleSpace]", "\<\" s | Frecuencia: \"\>", 
+   "\[InvisibleSpace]", "44100", "\[InvisibleSpace]", "\<\" Hz\"\>"}],
+  SequenceForm[
+  "Duraci\[OAcute]n: ", 299.33714285714285`, " s | Frecuencia: ", 44100, 
+   " Hz"],
+  Editable->False]], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.9730696200795174`*^9, {3.973070776072586*^9, 3.973070819854582*^9}, 
+   3.9730712121520796`*^9},
+ CellLabel->
+  "Durante la evaluaci\[OAcute]n de \
+In[1]:=",ExpressionUUID->"f7bae4a4-2dac-4157-9d12-76d5a22b930e"],
+
+Cell[BoxData["\<\"Audio cargado correctamente.\"\>"], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.9730696200795174`*^9, {3.973070776072586*^9, 3.973070819854582*^9}, 
+   3.9730712121486063`*^9},
+ CellLabel->
+  "Durante la evaluaci\[OAcute]n de \
+In[1]:=",ExpressionUUID->"69d459a4-0bac-435e-bdac-cb5a87397dca"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Cargando archivo: \"\>", 
+   "\[InvisibleSpace]", "\<\"Let Down (Remastered)\"\>"}],
+  SequenceForm["Cargando archivo: ", "Let Down (Remastered)"],
+  Editable->False]], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.9730696200795174`*^9, {3.973070776072586*^9, 3.973070819854582*^9}, 
+   3.9730712103032103`*^9},
+ CellLabel->
+  "Durante la evaluaci\[OAcute]n de \
+In[1]:=",ExpressionUUID->"a26e7b50-ff18-47e2-9484-23142957e7f5"],
+
+Cell[BoxData[""], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{
+  3.9730696200795174`*^9, {3.973070776072586*^9, 
+   3.973070819854582*^9}},ExpressionUUID->"7dcff417-2faf-4e71-a5f4-\
+d505e5fd9df3"],
+
+Cell[BoxData[""], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{3.973069620911092*^9, 
+  3.973070773532959*^9},ExpressionUUID->"07e70e4e-4131-4241-8f81-\
+3566cfd4041e"],
+
+Cell[BoxData[""], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{3.9730696209170923`*^9, 
+  3.9730707695503635`*^9},ExpressionUUID->"4fca3ba0-96b7-4bc9-9519-\
+29713d6dba81"],
+
+Cell[BoxData[""], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{3.973069620919092*^9, 
+  3.9730707670679283`*^9},ExpressionUUID->"8769d21f-4ede-45bc-8a4d-\
+6f43c463aeff"],
+
+Cell[BoxData[""], "Print",
+ GeneratedCell->False,
+ CellAutoOverwrite->False,
+ CellChangeTimes->{3.973069621182089*^9, 
+  3.9730707618262014`*^9},ExpressionUUID->"1409d406-9b3b-47b7-b7a2-\
+b5023fab0904"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.973070757371544*^9, 
+  3.97307075758092*^9}},ExpressionUUID->"8a45b135-92ca-4e2d-a637-\
+67def333c267"]
+},
+WindowSize->{1536, 773},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+FrontEndVersion->"12.0 para Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 8428, 185, 845, "Input",ExpressionUUID->"05174a56-dfe1-42ff-b54f-e62400a4305e"],
+Cell[CellGroupData[{
+Cell[9033, 211, 343, 8, 22, "Print",ExpressionUUID->"d3e0e39b-9024-4ef5-99fe-f1964df52f6a"],
+Cell[9379, 221, 380, 9, 22, "Print",ExpressionUUID->"087e3fe7-3629-438c-aabd-46ca0dbe14c4"],
+Cell[9762, 232, 355, 8, 22, "Print",ExpressionUUID->"dc68f4c3-50aa-4d69-a12f-31047880d2cd"],
+Cell[10120, 242, 661, 16, 22, "Print",ExpressionUUID->"f7bae4a4-2dac-4157-9d12-76d5a22b930e"],
+Cell[10784, 260, 349, 8, 22, "Print",ExpressionUUID->"69d459a4-0bac-435e-bdac-cb5a87397dca"],
+Cell[11136, 270, 513, 13, 22, "Print",ExpressionUUID->"a26e7b50-ff18-47e2-9484-23142957e7f5"],
+Cell[11652, 285, 230, 6, 22, "Print",ExpressionUUID->"7dcff417-2faf-4e71-a5f4-d505e5fd9df3"],
+Cell[11885, 293, 200, 5, 22, "Print",ExpressionUUID->"07e70e4e-4131-4241-8f81-3566cfd4041e"],
+Cell[12088, 300, 204, 5, 22, "Print",ExpressionUUID->"4fca3ba0-96b7-4bc9-9519-29713d6dba81"],
+Cell[12295, 307, 202, 5, 22, "Print",ExpressionUUID->"8769d21f-4ede-45bc-8a4d-6f43c463aeff"],
+Cell[12500, 314, 202, 5, 22, "Print",ExpressionUUID->"1409d406-9b3b-47b7-b7a2-b5023fab0904"]
+}, Open  ]]
+}, Open  ]],
+Cell[12729, 323, 151, 3, 28, "Input",ExpressionUUID->"8a45b135-92ca-4e2d-a637-67def333c267"]
+}
+]
+*)
+
