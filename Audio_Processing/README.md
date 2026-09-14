@@ -14,6 +14,6 @@ The objective of this project was to take a raw audio file (initially with a Rad
 ## Visual Preview
 *Because audio processing is highly visual, here is a look at the frequency analysis:*
 
-<img width="1543" height="286" alt="Let_Down_Spectrogram png" src="https://github.com/user-attachments/assets/e4f4c8c5-6fd4-41b2-a71a-b8f0199528b6" />
+![Audio Spectrogram Preview](Let_Down_Spectrogram.png)
 
 *(To see the full mathematical breakdown, open the `.nb` file included in this folder).*
