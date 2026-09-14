@@ -11,7 +11,7 @@ The objective of this project was to take a raw audio file (initially with a Rad
 * **Filtering:** Applied [insert type of filter, e.g., low-pass/high-pass] mathematical filters.
 * **Spectrogram Visualization:** Generated heatmaps of frequency intensity over time.
 
-## 👀 Visual Preview
+## Visual Preview
 *Because audio processing is highly visual, here is a look at the frequency analysis:*
 
 <img width="1543" height="286" alt="LetDown - Radiohead" src="https://github.com/user-attachments/assets/08d67573-f708-4a99-9ad8-fbac00c68e5f" />
