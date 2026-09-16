@@ -10,3 +10,9 @@ This directory contains laboratory scripts, exercises, and algorithm implementat
 * Explore 2D spatial filtering, edge detection, and morphological transformations on images.
 * Apply practical algorithms using mainly **Python**.
 ---
+
+# 🚧 Under Active Development
+
+This section is currently being developed as part of my ongoing coursework and computational projects.
+
+> *Status: In progress — files and updates are being committed regularly. Check back soon!*
